@@ -1,4 +1,4 @@
-function [intensity, Iout, prob, Convergence] = MT(Iin, level, N, Epochs, MA, f_func)
+function [intensity, Iout, prob, Convergence, pop] = MT(Iin, level, N, Epochs, MA, f_func)
 
 %% Initialize parameters
     % number of thresholds
@@ -69,13 +69,16 @@ function [intensity, Iout, prob, Convergence] = MT(Iin, level, N, Epochs, MA, f_
 
 %% Iteration
     if size(Iin, 3) == 1
-        [xR, fitR, Convergence] = feval(MA, level, N, dim, lb, ub, Epochs, xR, fitR, probR, f_func);
+        [xR, fitR, Convergence, pop] = feval(MA, level, N, dim, lb, ub, Epochs, xR, fitR, probR, f_func);
         [best_fitnessR, indexR] = max(fitR);
         best_xR = xR(indexR, :);
     elseif size(Iin, 3) == 3
-        [xR, fitR, ConvergenceR] = feval(MA, level, N, dim, lb, ub, Epochs, xR, fitR, probR, f_func);
-        [xG, fitG, ConvergenceG] = feval(MA, level, N, dim, lb, ub, Epochs, xG, fitG, probG, f_func);
-        [xB, fitB, ConvergenceB] = feval(MA, level, N, dim, lb, ub, Epochs, xB, fitB, probB, f_func);
+        [xR, fitR, ConvergenceR, popR] = feval(MA, level, N, dim, lb, ub, Epochs, xR, fitR, probR, f_func);
+        [xG, fitG, ConvergenceG, popG] = feval(MA, level, N, dim, lb, ub, Epochs, xG, fitG, probG, f_func);
+        [xB, fitB, ConvergenceB, popB] = feval(MA, level, N, dim, lb, ub, Epochs, xB, fitB, probB, f_func);
+%        [xR, fitR, ConvergenceR, popR] = RUN(level, N, dim, lb, ub, Epochs, xR, fitR, probR, f_func);
+%        [xG, fitG, ConvergenceG, popG] = RUN(level, N, dim, lb, ub, Epochs, xG, fitG, probG, f_func);
+%        [xB, fitB, ConvergenceB, popB] = RUN(level, N, dim, lb, ub, Epochs, xB, fitB, probB, f_func);
 
         [best_fitnessR, indexR] = max(fitR);
         [best_fitnessG, indexG] = max(fitG);
@@ -84,6 +87,7 @@ function [intensity, Iout, prob, Convergence] = MT(Iin, level, N, Epochs, MA, f_
         best_xG = xR(indexG, :);
         best_xB = xR(indexB, :);
         Convergence = [ConvergenceR; ConvergenceG; ConvergenceB];
+        pop = [popR, popG, popB];
     end
 %% Return the results
     if size(Iin, 3) == 1
