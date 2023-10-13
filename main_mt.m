@@ -66,6 +66,7 @@ for i = 1:runtimes
     disp(['The SSIM: ', num2str(ssim4mt)]);
     disp(['The FSIM: ', num2str(fsim)]);
     disp(['The FSIMc: ', num2str(fsim_c)]);
+    break;
     catch
     end
     end
